@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+@theme {
+    --animate-panning: pan 10s ease infinite;
+
+    @keyframes pan {
+        0% {
+            background-position: 50% 50%;
+        }
+        20% {
+            background-position: 100% 0%;
+        }
+        40% {
+            background-position: 100% 100%;
+        }
+        60% {
+            background-position: 0% 100%;
+        }
+        80% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 50% 50%;
+        }
+    }
+}
+
+
+

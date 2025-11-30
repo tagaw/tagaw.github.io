@@ -13,8 +13,30 @@ import Navbar from '../component/Navbar.astro'
 	</head>
 	<body>
 		<Navbar/>
-		<div class="absolute top-0 w-full h-screen flex justify-center items-center xl:text-9xl md:text-8xl sm:text-6xl text-[15vw] font-extrabold bg-black">
-			<p class="bg-linear-to-br from-blue-500 to-red-500 via-green-500 bg-size-[400%_400%] bg-clip-text text-transparent animate-panning">hello, world</p>
+		<div class="absolute top-0 shadow-xl w-full h-screen flex justify-center items-center xl:text-9xl md:text-8xl sm:text-6xl text-[15vw] font-extrabold bg-black">
+			<p class="bg-linear-to-br from-blue-500 to-red-500 via-green-500 bg-size-[400%_400%] bg-clip-text text-transparent text-glow animate-panning">
+				hello, world
+			</p>
+			<!-- divider -->
+			<div class="w-[70vw] absolute top-[95vh] h-[10vh] bg-neutral-500 rounded"></div>
+		</div>
+		
+		<div class="w-full h-screen bg-white top-[100vh] relative">
+			<div class="w-3/4 h-full mx-auto text-center font-bold ">
+				<div class="row-span-4">
+					<p class="xl:text-7xl md:text-6xl sm:text-4xl text-[10vmin] ">I am</p>
+					<p class="xl:text-8xl md:text-7xl sm:text-5xl text-[15vmin] ">Tyler Gaw</p>
+				</div>
+				<!-- maybe a picture -->
+				<div class="mx-auto border-1 rounded-lg row-start-1 m-5 w-[40vh] max-w-4/5">
+					<img src="../public/temp.png" alt="Picture of me" class="mx-auto rounded-lg object-cover"/>
+				</div>
+				<p class="xl:text-7xl md:text-6xl sm:text-4xl text-[10vw]">Welcome to my website</p>
+			</div>
+		
+			
+
+			
 		</div>
 	</body>
 </html>

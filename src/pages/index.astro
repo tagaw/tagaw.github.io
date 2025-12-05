@@ -18,23 +18,25 @@ import Navbar from '../component/Navbar.astro'
 				hello, world
 			</p>
 			<!-- divider -->
-			<div class="w-[70vw] absolute top-[95vh] h-[10vh] bg-neutral-500 rounded"></div>
+			<div class="w-[70vw] absolute top-[95vh] h-[10vh] bg-neutral-500 rounded z-10"></div>
 		</div>
 		
-		<div class="w-full h-screen h-fit bg-white top-[100vh] relative">
-			<div class="w-3/4 h-full mx-auto text-center font-bold grid grid-rows-3">
-				<div class="text-center flex flex-col justify-center items-center">
-					<p class="xl:text-7xl md:text-6xl text-4xl">I am</p>
-					<p class="xl:text-8xl md:text-7xl text-5xl">Tyler Gaw</p>
+		<div class="w-full h-screen bg-white top-[100vh] relative">
+			<div class="w-3/4 h-full mx-auto text-center font-bold grid grid-rows-3 md:grid-cols-2">
+				<div class="text-center flex flex-col justify-center items-center md:row-span-2">
+					<p class="xl:text-6xl md:text-4xl text-3xl">I am</p>
+					<p class="xl:text-7xl md:text-6xl text-4xl">Tyler Gaw</p>
 				</div>
 				<!-- maybe a picture -->
-				<div class="mx-auto border-1 rounded-lg h-full">
-					<img src="../public/temp.png" alt="Picture of me" class="mx-auto h-full rounded-lg object-cover"/>
+				<div class="mx-auto rounded-lg h-full md:row-start-1 md:col-start-2 md:row-span-2 md:grid">
+					<img src="/temp.png" alt="Picture of me" class="border-1 mx-auto h-full rounded-lg object-cover md:max-h-[40vmin] md:max-w-[40vmin] aspect-square md:place-self-end"/>
 				</div>
-				<p class="xl:text-7xl md:text-6xl text-4xl text-center flex flex-col justify-center items-center">Welcome to my website</p>
+				<p class="xl:text-7xl md:text-6xl text-4xl text-center flex flex-col justify-center items-center md:row-start-3 md:col-span-2">Welcome to my website</p>
 			</div>
 		</div>
 
-		<div class="w-full h-screen"></div>
+		<div class="w-full h-screen">
+
+		</div>
 	</body>
 </html>

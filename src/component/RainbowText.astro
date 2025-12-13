@@ -1,0 +1,7 @@
+---
+const { decoration } = Astro.props;
+---
+
+<p class={"bg-linear-to-br  from-blue-500 to-red-500 via-green-500 bg-size-[400%_400%] bg-clip-text text-transparent text-glow animate-panning " + (decoration ? decoration : "")}>
+	<slot />
+</p>

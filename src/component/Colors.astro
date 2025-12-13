@@ -1,0 +1,16 @@
+---
+const colors = ["bg-primary-100","bg-primary-200","bg-primary-300","bg-accent-100","bg-accent-200","bg-text-100","bg-text-200","bg-bg-100","bg-bg-200","bg-bg-300"]
+---
+
+<header class="bg-accent-100 top-0 sticky w-full h-16 z-50">
+    <div class="container px-2 flex flex-none justify-between items-center">
+        {colors.map((color) => {
+                return (
+                    <div class="h-full w-full ">
+                        <div class={`h-10 w-full border rounded-lg ${color} mx-auto`}></div>
+                        <p class="text-[.5rem] text-center h-fit">{color.slice(3)}</p>
+                    </div>
+                    )
+            })}
+    </div>
+</header>

@@ -13,7 +13,7 @@ const { title, description } = Astro.props;
 		<meta name="description" content={ description } />
 		<title>{ title }</title>
 	</head>
-	<body>
+	<body class="h-full w-full flex flex-col min-w-[200px]">
 		<slot />
 	</body>
 </html>

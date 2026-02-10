@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css'
-import Navbar from '../component/Navbar.astro'
 import Colors from '../component/Colors.astro'
 import RainbowText from '../component/RainbowText.astro'
 import Layout from '../layouts/Layout.astro'
@@ -8,33 +7,26 @@ import Layout from '../layouts/Layout.astro'
 
 <Layout title="Home - Tyler Gaw" description="Personal Website of Tyler Gaw">
 	<!-- <Colors/> -->
-	<Navbar/>
-	<div class="top-0 shadow-xl w-full py-24 h-screen max-h-[800px] flex text-center justify-center items-center xl:text-9xl md:text-8xl text-6xl font-extrabold bg-bg-300">
-		<RainbowText>hello, world</RainbowText>
-		
-	</div>
 	
-	<div class="w-full h-fit bg-bg-200 text-text-100 flex flex-none justify-center">
-		<div class="max-w-7xl w-full md:my-24">
-			<div class="w-3/4 h-full mx-auto text-center font-bold grid grid-rows-3 md:grid-cols-">
-				<div class="text-center flex flex-col justify-center items-center md:row-span-2">
+	<div class="w-full h-fit bg-bg-300 text-text-100 flex flex-none justify-center">
+		<div class="max-w-7xl w-full my-8 md:my-16">
+			<div class="w-3/4 h-full mx-auto text-center font-bold grid grid-rows-2 md:gap-8">
+				<div class="text-center flex flex-col justify-center items-center md:row-span-2 text-4xl xl:text-7xl md:text-6xl">
+					<RainbowText>hello, world</RainbowText>
+				</div>
+				<!-- maybe a picture -->
+				<div class="mx-auto rounded-lg h-full">
 					<p class="xl:text-6xl md:text-4xl text-3xl">I am</p>
 					<p class="xl:text-7xl md:text-6xl text-4xl">Tyler Gaw</p>
 				</div>
-				<!-- maybe a picture -->
-				<div class="mx-auto rounded-lg h-full md:row-start-1 md:col-start-2 md:row-span-2 md:grid">
-					<img src="/temp.png" alt="Picture of me" class="border rounded-lg aspect-square md:place-self-center md:w-4/5"/>
-				</div>
-				<p class="xl:text-7xl md:text-6xl text-4xl text-center flex flex-col justify-center items-center md:row-start-3 md:col-span-2 md:mt-8">welcome to my website</p>
 			</div>
 		</div>
-
 	</div>
 	
 	<div class="w-full h-fit bg-bg-100 text-text-200">
 		<div class="max-w-4xl mx-auto p-8 text-center md:text-xl xl:text-2xl my-4">
-			<h2 class="text-3xl md:text-4xl xl:text-6xl font-bold mb-4 md:mb-8 ">About Me</h2>
-			<p>I am a graduate student studying Healthcare Informatics with an interest in programming and data analysis. Feel free to check out some of my</p>
+			
+			<p>Welcome to my website where I showcase my projects and interests. Below are some of the projects I've been working on</p>
 
 			<div class="my-4 border-4 w-fit  mx-auto rounded-lg bg-linear-to-br from-blue-500 to-red-500 via-green-500 bg-size-[400%_400%] animate-panning bg-clip-border border-transparent">
 				<div class="w-full h-full bg-bg-100 px-2 rounded-md">
@@ -42,7 +34,7 @@ import Layout from '../layouts/Layout.astro'
 				</div>
 			</div>
 			<div class="w-full h-48"></div>
-			<p>and explore some of my other projects on my</p>
+			<p>explore some of my other projects on my</p>
 			<h1 class="mt-2 underline">Projects</h1><span>page</span>
 			
 		</div>

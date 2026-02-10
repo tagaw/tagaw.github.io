@@ -1,4 +1,6 @@
 ---
+import Footer from '../component/Footer.astro';
+import Navbar from '../component/Navbar.astro';
 import '../styles/global.css'
 
 const { title, description } = Astro.props;
@@ -13,7 +15,10 @@ const { title, description } = Astro.props;
 		<meta name="description" content={ description } />
 		<title>{ title }</title>
 	</head>
-	<body class="h-full w-full flex flex-col min-w-[200px]">
+	
+	<body class="h-full w-screen bg-primary-100 flex flex-col min-w-[200px] max-w-screen min-h-screen overflow-x-hidden">
+		<Navbar/>
 		<slot />
+		<Footer/>
 	</body>
 </html>

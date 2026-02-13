@@ -3,7 +3,13 @@ import Footer from '../component/Footer.astro';
 import Navbar from '../component/Navbar.astro';
 import '../styles/global.css'
 
-const { title, description } = Astro.props;
+interface Props {
+	title: string;
+	description: string;
+	spa?:boolean;
+}
+
+const { title, description, spa = false } = Astro.props;
 ---
 
 <html lang="en">
@@ -16,9 +22,15 @@ const { title, description } = Astro.props;
 		<title>{ title }</title>
 	</head>
 	
-	<body class="h-full w-screen bg-primary-100 flex flex-col min-w-[200px] max-w-screen min-h-screen overflow-x-hidden">
+	<body class="h-fit w-screen bg-primary-100 flex flex-col min-w-[200px] max-w-screen overflow-x-hidden ">
+		{spa ? 
+		<div class="min-h-screen w-full flex flex-col">
+			<Navbar/>
+			<slot />
+		</div>
+		:
 		<Navbar/>
-		<slot />
+		<slot />}
 		<Footer/>
 	</body>
 </html>

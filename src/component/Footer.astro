@@ -1,25 +1,32 @@
 ---
 import MailLogo from '../assets/mail.svg';
 import GithubLogo from '../assets/github_logo.svg';
+import Link from './Link.astro';
 ---
 
 
 <footer class="bg-primary-100 text-accent-200 py-4 md:flex md:justify-center">
-  <div class="container text-center flex flex-col items-center gap-4 max-w-[1440px] md:items-start md:pl-2 md:ml-10 md:border-l md:border-primary-300">
-    <div class="text-left">
-        <p class="text-center md:text-left">Tyler Gaw - 2026</p>
-        <div class="w-fit h-fit flex items-center gap-2">
-            <div class="w-6 h-6 inline-block">
-                <MailLogo/>
+  <div class="w-full mx-auto flex justify-center">
+      <div class="text-center flex flex-col items-center gap-4 w-full max-w-[1440px] md:items-start md:pl-2 md:ml-10 md:border-l md:pr-2 md:mr-10 md:border-r md:border-primary-300 md:grid-cols-2 md:grid">
+        <div class="text-left border-b py-2 md:border-0 md:pb-0 md:w-full">
+            <p class="text-center md:text-left">Tyler Gaw - 2026</p>
+            <div class="w-fit h-fit flex items-center gap-2">
+                <div class="w-6 h-6 inline-block">
+                    <MailLogo/>
+                </div>
+                tyler.agaw@gmail.com
             </div>
-            tyler.agaw@gmail.com
-        </div>
-        <div class="w-fit h-fit flex items-center gap-2">
-            <div class="w-6 h-6 inline-block rounded-full bg-accent-200">
-                <GithubLogo/>
+            <div class="w-fit h-fit flex items-center gap-2">
+                <div class="w-6 h-6 inline-block rounded-full bg-accent-200">
+                    <GithubLogo/>
+                </div>
+                tagaw
             </div>
-            tagaw
         </div>
-    </div>
+        <div class="w-4/5 text-center md:text-right md:w-full md:mr-10">
+            <p class=>Built with <Link href="https://astro.build/">Astro</Link> and <Link href="https://tailwindcss.com/">Tailwind CSS</Link></p>
+            <p>...and the <Link href="https://dtinth.github.io/comic-mono-font/">Comic Mono font</Link>!</p>
+        </div>
+      </div>
   </div>
 </footer>

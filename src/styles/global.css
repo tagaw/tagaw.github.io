@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+body {
+    font-family: 'Comic Mono', sans-serif;
+}
+
 @theme {
     --animate-panning: pan 5s ease-in-out infinite;
 

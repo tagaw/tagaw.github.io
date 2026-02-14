@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import { line } from "d3-shape";
+
 
 type TadpoleProps = {
     canvasRef: React.RefObject<SVGSVGElement | null>;
@@ -29,81 +31,116 @@ function dist(x1: number, y1: number, x2: number, y2: number) {
 
 function useAnimationFrame( tick: () => void, deps: any[] = []) {
     const frameID = useRef<number | null>(null);
+    const callback = () => {
+        tick();
+        frameID.current = requestAnimationFrame(callback);
+    }
     useEffect( () => {
-        frameID.current = requestAnimationFrame(tick);
+        frameID.current = requestAnimationFrame(callback);
         return () => {
             if (frameID.current)
                 cancelAnimationFrame(frameID.current);
+            console.log("cleaned up animation frame with id: ", frameID.current);
         }
-    }, deps);
+    });
 }
 
 
 export default function Tadpole({ canvasRef, speed }: TadpoleProps) {
     const headLength = 5;
     const tailLength = 10;
-    
+
     // Refs for use in direct DOM manipulation
     const headRef = useRef<SVGLineElement>(null);
     const bodyRef = useRef<SVGPathElement>(null);
     const tailRef = useRef<SVGPathElement>(null);
 
-    // Refs holding position data of the tadpole, used in animation loop
-    const posX = useRef<number>(0);
-    const posY = useRef<number>(0);
-    const tailX = useRef<number[]>(new Array(tailLength).fill(0));
-    const tailY = useRef<number[]>(new Array(tailLength).fill(0));
+    // These arrays hold position data of the tadpole and tail. Head position is first element
+    const pathX = useRef<number[]>(new Array(tailLength).fill(0));
+    const pathY = useRef<number[]>(new Array(tailLength).fill(0));
+    // Initialized values are actually set during the useEffect below since SVG is initially null before it is rendered
+    useEffect(() => {
+        if (canvasRef.current) {
+            pathX.current = new Array(tailLength).fill(Math.random() * canvasRef.current.getBoundingClientRect().width);
+            pathY.current = new Array(tailLength).fill(Math.random() * canvasRef.current.getBoundingClientRect().height);
+        }
+    }, [canvasRef]);
 
+    // randomize initial direction
     const vx = useRef<number>(speed * Math.cos(Math.random() * 2 * Math.PI));
     const vy = useRef<number>(speed * Math.sin(Math.random() * 2 * Math.PI));
 
+    // d3js path generator
     function headXOffset() {
         return headLength * Math.cos(Math.atan2(vy.current, vx.current));
     }
     function headYOffset() {
         return headLength * Math.sin(Math.atan2(vy.current, vx.current));
     }
-    console.log("Tadpole rendered with speed: ", speed);
-
+    console.log("Tadpole rendered with speed: ", vx.current);
+    const deg = useRef(0);
     function tickAnimation() {
         const canvas = canvasRef.current;
+        
+        const lineGenerator = line().x((_, i) => pathX.current[i]).y((_, i) => pathY.current[i]);
         if (canvas) {
             const width = canvas?.getBoundingClientRect().width!;
             const height = canvas?.getBoundingClientRect().height!;
             
-            posX.current += vx.current;
-            posY.current += vy.current;
-
-            if (posX.current < 0 || posX.current > width) {
+            pathX.current[0] += vx.current;
+            pathY.current[0] += vy.current;
+            
+            // boundary collision, correct for resizing canvas
+            if (pathX.current[0] < 0 || pathX.current[0] > width) {
                 vx.current *= -1;
-                if (posX.current+vx.current < 0) posX.current = 0;
-                if (posX.current+vx.current > width) posX.current = width;
+                if (pathX.current[0]+vx.current < 0) pathX.current[0] = 0;
+                if (pathX.current[0]+vx.current > width) pathX.current[0] = width;
             }
-            if (posY.current < 0 || posY.current > height) {
+            if (pathY.current[0] < 0 || pathY.current[0] > height) {
                 vy.current *= -1;
-                if (posY.current+vy.current < 0) posY.current = 0;
-                if (posY.current+vy.current > height) posY.current = height;
+                if (pathY.current[0]+vy.current < 0) pathY.current[0] = 0;
+                if (pathY.current[0]+vy.current > height) pathY.current[0] = height;
             }
 
-            // Animate Head
-            headRef.current?.setAttribute("x1", posX.current.toString());
-            headRef.current?.setAttribute("y1", posY.current.toString());
-            headRef.current?.setAttribute("x2", (posX.current + headXOffset()).toString());
-            headRef.current?.setAttribute("y2", (posY.current + headYOffset()).toString());
+            // tail position calculation
+            let segmentX = pathX.current[0];
+            let segmentY = pathY.current[0];
+            let segmentDx = vx.current;
+            let segmentDy = vy.current;
+            let currSpeed = speed;
+            const inc = speed * 12;
+            const stretchFactor = -7 - speed/2;
+
+            for (let i = 1; i < tailLength; i++) {
+                const currentVx = segmentX - pathX.current[i];
+                const currentVy = segmentY - pathY.current[i];
+
+                deg.current += inc;
+                const wave = Math.sin((deg.current + i * 10) / 700) / (currSpeed);
+
+                segmentX += (segmentDx / currSpeed) * stretchFactor;
+                segmentY += (segmentDy / currSpeed) * stretchFactor;
+
+                pathX.current[i] = segmentX - wave*segmentDy;
+                pathY.current[i] = segmentY + wave*segmentDx;
+
+                segmentDx = currentVx;
+                segmentDy = currentVy;
+                currSpeed = Math.sqrt(segmentDx ** 2 + segmentDy ** 2);
+            }
+                // Animate Head
+            headRef.current?.setAttribute("x1", pathX.current[0].toString());
+            headRef.current?.setAttribute("y1", pathY.current[0].toString());
+            headRef.current?.setAttribute("x2", (pathX.current[0] + headXOffset()).toString());
+            headRef.current?.setAttribute("y2", (pathY.current[0] + headYOffset()).toString());
+
+            // Animate Body and Tail. 
+            // Dummy arrays of correct length are passed to line generator to produce correct path from current position arrays
+            bodyRef.current?.setAttribute("d", lineGenerator(new Array(3).fill(0))!);
+            tailRef.current?.setAttribute("d", lineGenerator(new Array(tailLength).fill(0))!);
         }
-        requestAnimationFrame(tickAnimation);
     }
     
-    // When SVG parent is re-rendered, randomly tadpole position
-    useEffect(() => {
-        if (canvasRef.current) {
-            posX.current = Math.random() * canvasRef.current.getBoundingClientRect().width;
-            posY.current = Math.random() * canvasRef.current.getBoundingClientRect().height;
-            tailX.current = new Array(tailLength).fill(posX.current);
-            tailY.current = new Array(tailLength).fill(posY.current);
-        }
-    }, [canvasRef]);
-
     useAnimationFrame(tickAnimation, [speed]);
 
     return (

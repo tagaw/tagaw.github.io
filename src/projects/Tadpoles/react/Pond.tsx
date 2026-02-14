@@ -17,8 +17,9 @@ export default function Pond() {
         <>
         <div className='w-full h-full border-4 flex-none'>
             <svg ref={svgRef!} className="w-full h-full" onClick={() => setX(val => (val|| 0) + 1)}>
-                 {/* <text x="20" y="35" className="small">{x || 'null'}</text> */}
-                 <Tadpole canvasRef={svgRef} speed={x} />
+                {/* <text x="20" y="35" className="small">{x || 'null'}</text> */}
+                <Tadpole canvasRef={svgRef} speed={1} />
+
             </svg>
         </div>      
         </>

@@ -24,7 +24,7 @@ const { title, description, spa = false } = Astro.props;
 	
 	<body class="h-fit w-screen bg-primary-100 flex flex-col min-w-[200px] max-w-screen overflow-x-hidden ">
 		{spa ? 
-		<div class="min-h-screen w-full flex flex-col">
+		<div class="h-screen w-full flex flex-col">
 			<Navbar/>
 			<slot />
 		</div>

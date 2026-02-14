@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -7,6 +8,8 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: "https://tagaw.github.io",
   vite: {
-    plugins: [tailwindcss()]
-  }
+    plugins: [tailwindcss()],
+  },
+  integrations: [react()]
+
 });

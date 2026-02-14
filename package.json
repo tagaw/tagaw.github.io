@@ -9,10 +9,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^4.4.2",
     "@fontsource/comic-mono": "^5.2.5",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.16.0",
     "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {

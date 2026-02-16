@@ -47,6 +47,8 @@ function useAnimationFrame( tick: () => void, deps: any[] = []) {
 
 
 export default function Tadpole({ canvasRef, speed }: TadpoleProps) {
+    const lineGenerator = line().x((_, i) => pathX.current[i]).y((_, i) => pathY.current[i]);
+    
     const headLength = 5;
     const tailLength = 10;
 
@@ -70,7 +72,6 @@ export default function Tadpole({ canvasRef, speed }: TadpoleProps) {
     const vx = useRef<number>(speed * Math.cos(Math.random() * 2 * Math.PI));
     const vy = useRef<number>(speed * Math.sin(Math.random() * 2 * Math.PI));
 
-    // d3js path generator
     function headXOffset() {
         return headLength * Math.cos(Math.atan2(vy.current, vx.current));
     }
@@ -78,11 +79,11 @@ export default function Tadpole({ canvasRef, speed }: TadpoleProps) {
         return headLength * Math.sin(Math.atan2(vy.current, vx.current));
     }
     console.log("Tadpole rendered with speed: ", vx.current);
-    const deg = useRef(0);
+    const tailCounter = useRef(0);
+    
     function tickAnimation() {
         const canvas = canvasRef.current;
         
-        const lineGenerator = line().x((_, i) => pathX.current[i]).y((_, i) => pathY.current[i]);
         if (canvas) {
             const width = canvas?.getBoundingClientRect().width!;
             const height = canvas?.getBoundingClientRect().height!;
@@ -101,34 +102,40 @@ export default function Tadpole({ canvasRef, speed }: TadpoleProps) {
                 if (pathY.current[0]+vy.current < 0) pathY.current[0] = 0;
                 if (pathY.current[0]+vy.current > height) pathY.current[0] = height;
             }
+            
+            // tail osscilation, modified from d3js example
+            (() => { 
+                // tail position calculation
+                let segmentX = pathX.current[0];
+                let segmentY = pathY.current[0];
+                let segmentDx = vx.current;
+                let segmentDy = vy.current;
+                let currSpeed = speed;
+                const inc = speed * 12;
+                const stretchFactor = -7 - speed/2;
 
-            // tail position calculation
-            let segmentX = pathX.current[0];
-            let segmentY = pathY.current[0];
-            let segmentDx = vx.current;
-            let segmentDy = vy.current;
-            let currSpeed = speed;
-            const inc = speed * 12;
-            const stretchFactor = -7 - speed/2;
+                for (let i = 1; i < tailLength; i++) {
+                    const currentVx = segmentX - pathX.current[i];
+                    const currentVy = segmentY - pathY.current[i];
 
-            for (let i = 1; i < tailLength; i++) {
-                const currentVx = segmentX - pathX.current[i];
-                const currentVy = segmentY - pathY.current[i];
+                    tailCounter.current += inc;
+                    const wave = Math.sin((tailCounter.current + i * 10) / 700) / (currSpeed);
 
-                deg.current += inc;
-                const wave = Math.sin((deg.current + i * 10) / 700) / (currSpeed);
+                    segmentX += (segmentDx / currSpeed) * stretchFactor;
+                    segmentY += (segmentDy / currSpeed) * stretchFactor;
 
-                segmentX += (segmentDx / currSpeed) * stretchFactor;
-                segmentY += (segmentDy / currSpeed) * stretchFactor;
+                    pathX.current[i] = segmentX - wave*segmentDy;
+                    pathY.current[i] = segmentY + wave*segmentDx;
 
-                pathX.current[i] = segmentX - wave*segmentDy;
-                pathY.current[i] = segmentY + wave*segmentDx;
+                    segmentDx = currentVx;
+                    segmentDy = currentVy;
+                    currSpeed = Math.sqrt(segmentDx ** 2 + segmentDy ** 2);
+                }
+            })();
 
-                segmentDx = currentVx;
-                segmentDy = currentVy;
-                currSpeed = Math.sqrt(segmentDx ** 2 + segmentDy ** 2);
-            }
-                // Animate Head
+            // apply calculated values with direct dom manipulation
+            (() => {
+            // Animate Head
             headRef.current?.setAttribute("x1", pathX.current[0].toString());
             headRef.current?.setAttribute("y1", pathY.current[0].toString());
             headRef.current?.setAttribute("x2", (pathX.current[0] + headXOffset()).toString());
@@ -138,6 +145,7 @@ export default function Tadpole({ canvasRef, speed }: TadpoleProps) {
             // Dummy arrays of correct length are passed to line generator to produce correct path from current position arrays
             bodyRef.current?.setAttribute("d", lineGenerator(new Array(3).fill(0))!);
             tailRef.current?.setAttribute("d", lineGenerator(new Array(tailLength).fill(0))!);
+            })();
         }
     }
     

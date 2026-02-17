@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { line } from "d3-shape";
-
+import useAnimationFrame from "../hooks/useAnimationFrame";
 
 type TadpoleProps = {
     canvasRef: React.RefObject<SVGSVGElement | null>;
@@ -29,26 +29,9 @@ function dist(x1: number, y1: number, x2: number, y2: number) {
     return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
-function useAnimationFrame( tick: () => void, deps: any[] = []) {
-    const frameID = useRef<number | null>(null);
-    const callback = () => {
-        tick();
-        frameID.current = requestAnimationFrame(callback);
-    }
-    useEffect( () => {
-        frameID.current = requestAnimationFrame(callback);
-        return () => {
-            if (frameID.current)
-                cancelAnimationFrame(frameID.current);
-            console.log("cleaned up animation frame with id: ", frameID.current);
-        }
-    });
-}
 
 
-export default function Tadpole({ canvasRef, speed }: TadpoleProps) {
-    const lineGenerator = line().x((_, i) => pathX.current[i]).y((_, i) => pathY.current[i]);
-    
+export default function Tadpole({ canvasRef, speed }: TadpoleProps) {    
     const headLength = 5;
     const tailLength = 10;
 
@@ -72,18 +55,25 @@ export default function Tadpole({ canvasRef, speed }: TadpoleProps) {
     const vx = useRef<number>(speed * Math.cos(Math.random() * 2 * Math.PI));
     const vy = useRef<number>(speed * Math.sin(Math.random() * 2 * Math.PI));
 
+    // // update internal speed if changed by parent
+    // useEffect(() => {
+    //     vx.current = speed * Math.cos(Math.random() * 2 * Math.PI);
+    //     vy.current = speed * Math.sin(Math.random() * 2 * Math.PI);
+    // }, [speed])
+
+    const tailCounter = useRef(0);
+
     function headXOffset() {
         return headLength * Math.cos(Math.atan2(vy.current, vx.current));
     }
     function headYOffset() {
         return headLength * Math.sin(Math.atan2(vy.current, vx.current));
     }
-    console.log("Tadpole rendered with speed: ", vx.current);
-    const tailCounter = useRef(0);
     
+    const lineGenerator = line().x((_, i) => pathX.current[i]).y((_, i) => pathY.current[i]);
     function tickAnimation() {
         const canvas = canvasRef.current;
-        
+
         if (canvas) {
             const width = canvas?.getBoundingClientRect().width!;
             const height = canvas?.getBoundingClientRect().height!;
